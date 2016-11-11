@@ -87,13 +87,17 @@ class PickAndPlaceFileKicad(PickAndPlaceFile):
 	for line in f:
 	    rows.append(line.split())
 	    
-
-        self.col_map = [colors.Color(1,0,0), 
+        self.col_map = [
+		  colors.Color(1,0,0), 
                   colors.Color(1,1,0), 
                   colors.Color(0,1,0), 
                   colors.Color(0,1,1), 
                   colors.Color(1,0,1), 
-                  colors.Color(0,0,1)]
+                  colors.Color(0,0,1), 
+		  colors.Color(0,0,0),
+                  colors.Color(0.80392,0.52157,0.24706),
+		  colors.Color(0.48627,0.65098,0.34902),
+		  colors.Color(0.58431,0.62353,0.87059)]
 
 #	Ref    Val                  Package         PosX       PosY        Rot     Side
 
@@ -118,7 +122,7 @@ class PickAndPlaceFileKicad(PickAndPlaceFile):
                 w = 1 * mm
                 h = 1 * mm
                 l = i[i_layer]
-		if l == "F.Cu":
+		if l == "top":
 		    layer = "Top"
 		else:
 		    layer = "Bottom"
@@ -212,7 +216,7 @@ def producePrintoutsForLayer(base_name, layer, canv):
     ngrp =  pf.num_groups(layer)
 
     for page in range(0, (ngrp+5)/6):
-        n_comps = min(6, ngrp - page*6)
+        n_comps = min(10, ngrp - page*6)
 
         canv.saveState()
         canv.translate( gerberOffset[0], gerberOffset[1] )
@@ -233,6 +237,6 @@ def producePrintoutsForLayer(base_name, layer, canv):
 
 import sys
 canv = canvas.Canvas(sys.argv[1]+"_assy.pdf")
-#producePrintoutsForLayer(sys.argv[1], "Top", canv)
+producePrintoutsForLayer(sys.argv[1], "Top", canv)
 producePrintoutsForLayer(sys.argv[1], "Bottom", canv)
 canv.save()
