@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os.path
 from gerber2pdf import *
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
@@ -180,10 +181,30 @@ def renderGerber(base_name, layer, canv):
     global gerberExtents
     if(layer == "Bottom"):
         f_copper = base_name+".GBL"
+	if not os.path.isfile(f_copper):
+	    f_copper = base_name+".gbl"
+	    if not os.path.isfile(f_copper):
+		print("F.Cu Gerber file not found! - .gbl")
+		sys.exit(0)	
         f_overlay = base_name+".GBO"
+	if not os.path.isfile(f_overlay):
+	    f_overlay = base_name+".gbo"
+	    if not os.path.isfile(f_overlay):
+		print("F.Silk Gerber file not found! - .gbo")
+		sys.exit(0)
     else:
         f_copper = base_name+".GTL"
+	if not os.path.isfile(f_copper):
+	    f_copper = base_name+".gtl"
+	    if not os.path.isfile(f_copper):
+		print("F.Silk Gerber file not found! - .gtl")
+		sys.exit(0)
         f_overlay = base_name+".GTO"
+	if not os.path.isfile(f_overlay):
+	    f_overlay = base_name+".gto"
+	    if not os.path.isfile(f_overlay):
+		print("F.Silk Gerber file not found! - .gto")
+		sys.exit(0)
 
     canv.setLineWidth(0.0)
     gm = GerberMachine( "", canv )
